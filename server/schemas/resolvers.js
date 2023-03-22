@@ -1,5 +1,5 @@
 const { AuthenticationError } = require('apollo-server-express');
-const {User, Book} = require('../models')
+const { User } = require('../models');
 const { signToken } = require('../utils/auth');
 
 const resolvers = {
@@ -9,21 +9,21 @@ const resolvers = {
               return User.findOne({ _id: context.user._id });
             }
             throw new AuthenticationError('You need to be logged in!');
-          },
+          }
        
 
     
     }, 
-    Mutations: {
-        addUser: async (parent, { userName, email, password }) => {
-            const user = await User.create({ userName, email, password });
+    Mutation: {
+        addUser: async (parent, args) => {
+            const user = await User.create(args);
             const token = signToken(user);
       
             return { token, user };
           },
 
-        login: async (parent, { userName, email, password }) => {
-            const user = await Profile.findOne({ userName,email });
+        login: async (parent, { email, password }) => {
+            const user = await User.findOne({ email });
       
             if (!user) {
               throw new AuthenticationError('No user with this email found!');
@@ -38,6 +38,22 @@ const resolvers = {
             const token = signToken(user);
             return { token, user };
           },
+          
+          saveBook: async (parent, { authors,bookId,title}, context) => {
+            console.log(context);
+            if (context.user) {
+              const book = new Book({authors, bookId, title });
+      
+              await User.findByIdAndUpdate(context.user.id, {
+                $push: { savedBooks: book},
+              });
+      
+              return book;
+            }
+      
+            throw new AuthenticationError('Not logged in');
+          }
+          ,
           removeBook: async (parent, args, context) => {
             if (context.user) {
               return User.findOneAndDelete({ bookId});
@@ -45,4 +61,6 @@ const resolvers = {
             throw new AuthenticationError('You need to be logged in!');
           },
         }
-    }
+    };
+
+    module.exports = resolvers;
