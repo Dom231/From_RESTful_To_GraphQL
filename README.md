@@ -32,7 +32,16 @@
 * THEN I am logged out of the site and presented with a menu with the options Search for Books and Login/Signup and an input field to search for books and a submit button 
 
 ## Current Status 
+* Backend is currenlty set up to run apollo
+* typeDefs and Resolvers are setup 
+* muations and queries have been created on the front end 
+* APP on client side has been set up to run Apollo
 
 ## Left to do 
+* The front end still needs work
+* The mutations and queries have not yet been implomented in the frontend pages 
+* test if the saved book and removed book mutations work (Does not work on SandBox; WAIT UNTIL FRONTEND IS SETUP!!!)
+
 
 ## Deployed sight link 
+[Stay tuned]
